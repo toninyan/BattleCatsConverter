@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Battle Cats Converter</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+</head>
+
+<body>
+
+<h1>Battle Cats Converter</h1>
+
+<p>背景画像</p>
+
+<input
+type="file"
+id="backgroundFile"
+accept=".png">
+
+<br><br>
+
+<p>キャラZIP</p>
+
+<input
+type="file"
+id="zipFile"
+accept=".zip">
+
+<br><br>
+
+<p>背景判定の許容値</p>
+
+<input
+type="number"
+id="tolerance"
+value="15"
+min="0"
+max="255">
+
+<br><br>
+
+<button id="convert">
+
+変換
+
+</button>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
