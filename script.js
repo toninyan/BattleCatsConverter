@@ -46,17 +46,24 @@ await loadImage(backgroundFile);
 const backgroundCanvas =
 imageToCanvas(backgroundImage);
 
-alert(
+const firstImageName =
+zipData.images[0];
 
-"背景サイズ\n" +
+const firstBlob =
+await zipData.zip
+.file(firstImageName)
+.async("blob");
 
-backgroundCanvas.canvas.width +
-
-" × " +
-
-backgroundCanvas.canvas.height
-
+const resultCanvas =
+await processImage(
+    firstBlob,
+    backgroundCanvas,
+    tolerance
 );
+
+document.body.appendChild(resultCanvas);
+
+alert("背景削除成功！");
 }
 async function loadZip(file){
 
@@ -148,5 +155,52 @@ function imageToCanvas(image){
         )
 
     };
+
+}
+async function processImage(file, backgroundCanvas, tolerance){
+
+    // キャラ画像を読み込む
+    const image = await loadImage(file);
+
+    // Canvas化
+    const catCanvas = imageToCanvas(image);
+
+    const bgData =
+    backgroundCanvas.imageData.data;
+
+    const catData =
+    catCanvas.imageData.data;
+
+    // 全ピクセル比較
+    for(let i=0;i<catData.length;i+=4){
+
+        const dr =
+        Math.abs(catData[i]-bgData[i]);
+
+        const dg =
+        Math.abs(catData[i+1]-bgData[i+1]);
+
+        const db =
+        Math.abs(catData[i+2]-bgData[i+2]);
+
+        const diff = dr+dg+db;
+
+        if(diff<=tolerance){
+
+            // 透明にする
+            catData[i+3]=0;
+
+        }
+
+    }
+
+    // Canvasへ戻す
+    catCanvas.ctx.putImageData(
+        catCanvas.imageData,
+        0,
+        0
+    );
+
+    return catCanvas.canvas;
 
 }
