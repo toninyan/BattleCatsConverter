@@ -40,10 +40,23 @@ async function convert(){
     const zipData =
 await loadZip(zipFile);
 
-alert(
-"PNG枚数："+zipData.images.length
-);
+const backgroundImage =
+await loadImage(backgroundFile);
 
+const backgroundCanvas =
+imageToCanvas(backgroundImage);
+
+alert(
+
+"背景サイズ\n" +
+
+backgroundCanvas.canvas.width +
+
+" × " +
+
+backgroundCanvas.canvas.height
+
+);
 }
 async function loadZip(file){
 
@@ -84,6 +97,55 @@ async function loadZip(file){
 
         zip,
         images
+
+    };
+
+}
+async function loadImage(file){
+
+    return new Promise((resolve,reject)=>{
+
+        const img = new Image();
+
+        img.onload = ()=>{
+
+            resolve(img);
+
+        };
+
+        img.onerror = ()=>{
+
+            reject("画像を読み込めませんでした");
+
+        };
+
+        img.src = URL.createObjectURL(file);
+
+    });
+
+}
+
+function imageToCanvas(image){
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(image,0,0);
+
+    return {
+
+        canvas,
+        ctx,
+        imageData: ctx.getImageData(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        )
 
     };
 
