@@ -37,10 +37,54 @@ async function convert(){
 
     }
 
-    alert(
-        "準備完了！\n\n" +
-        "許容値：" +
-        tolerance
-    );
+    const zipData =
+await loadZip(zipFile);
+
+alert(
+"PNG枚数："+zipData.images.length
+);
+
+}
+async function loadZip(file){
+
+    // ZIPを読み込む
+    const zip = await JSZip.loadAsync(file);
+
+    // PNG一覧
+    const images = [];
+
+    for(const name in zip.files){
+
+        if(name.toLowerCase().endsWith(".png")){
+
+            images.push(name);
+
+        }
+
+    }
+
+    // 数字順
+    images.sort((a,b)=>{
+
+        const numA =
+        parseInt(
+            a.match(/\d+(?=\.[^.]+$)/)[0]
+        );
+
+        const numB =
+        parseInt(
+            b.match(/\d+(?=\.[^.]+$)/)[0]
+        );
+
+        return numA-numB;
+
+    });
+
+    return {
+
+        zip,
+        images
+
+    };
 
 }
