@@ -48,7 +48,9 @@ imageToCanvas(backgroundImage);
 
 const newZip = new JSZip();
 
-for(const imageName of zipData.images){
+for(let i = 0; i < zipData.images.length; i += 2){
+
+    const imageName = zipData.images[i];
 
     const imageBlob =
     await zipData.zip
@@ -80,7 +82,13 @@ for(const imageName of zipData.images){
 
 );
 
-alert("完成！");
+alert(
+    "完成！\n\n" +
+    zipData.images.length +
+    "枚 → " +
+    Math.ceil(zipData.images.length / 2) +
+    "枚"
+);
 }
 async function loadZip(file){
 
