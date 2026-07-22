@@ -173,24 +173,19 @@ async function processImage(file, backgroundCanvas, tolerance){
 
     // 全ピクセル比較
     for(let i=0;i<catData.length;i+=4){
+const dr = Math.abs(catData[i] - bgData[i]);
+const dg = Math.abs(catData[i+1] - bgData[i+1]);
+const db = Math.abs(catData[i+2] - bgData[i+2]);
 
-        const dr =
-        Math.abs(catData[i]-bgData[i]);
+if (
+    dr <= tolerance &&
+    dg <= tolerance &&
+    db <= tolerance
+){
 
-        const dg =
-        Math.abs(catData[i+1]-bgData[i+1]);
+    catData[i+3] = 0;
 
-        const db =
-        Math.abs(catData[i+2]-bgData[i+2]);
-
-        const diff = dr+dg+db;
-
-        if(diff<=tolerance){
-
-            // 透明にする
-            catData[i+3]=0;
-
-        }
+}
 
     }
 
