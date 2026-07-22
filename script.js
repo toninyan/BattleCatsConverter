@@ -46,24 +46,41 @@ await loadImage(backgroundFile);
 const backgroundCanvas =
 imageToCanvas(backgroundImage);
 
-const firstImageName =
-zipData.images[0];
+const newZip = new JSZip();
 
-const firstBlob =
-await zipData.zip
-.file(firstImageName)
-.async("blob");
+for(const imageName of zipData.images){
 
-const resultCanvas =
-await processImage(
-    firstBlob,
-    backgroundCanvas,
-    tolerance
+    const imageBlob =
+    await zipData.zip
+    .file(imageName)
+    .async("blob");
+
+    const resultCanvas =
+    await processImage(
+        imageBlob,
+        backgroundCanvas,
+        tolerance
+    );
+
+    const pngBlob =
+    await saveCanvasAsBlob(resultCanvas);
+
+    newZip.file(
+        imageName,
+        pngBlob
+    );
+
+}
+    await downloadZip(
+
+    newZip,
+
+    "background_removed_" +
+    zipFile.name
+
 );
 
-document.body.appendChild(resultCanvas);
-
-alert("背景削除成功！");
+alert("完成！");
 }
 async function loadZip(file){
 
@@ -197,5 +214,42 @@ if (
     );
 
     return catCanvas.canvas;
+
+}
+async function saveCanvasAsBlob(canvas){
+
+    return new Promise((resolve)=>{
+
+        canvas.toBlob((blob)=>{
+
+            resolve(blob);
+
+        },"image/png");
+
+    });
+
+}
+async function downloadZip(zip,fileName){
+
+    const blob =
+    await zip.generateAsync({
+
+        type:"blob"
+
+    });
+
+    const url =
+    URL.createObjectURL(blob);
+
+    const a =
+    document.createElement("a");
+
+    a.href = url;
+
+    a.download = fileName;
+
+    a.click();
+
+    URL.revokeObjectURL(url);
 
 }
