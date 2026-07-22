@@ -3,7 +3,15 @@ document
 .onclick = convert;
 
 async function convert(){
+　　const imageName =
+document
+.getElementById("imageName")
+.value.trim();
 
+　　const zipName =
+document
+.getElementById("zipName")
+.value.trim();
     const backgroundFile =
     document
     .getElementById("backgroundFile")
@@ -36,7 +44,21 @@ async function convert(){
         return;
 
     }
+　　if(imageName===""){
 
+    alert("画像ファイル名を入力してください");
+
+    return;
+
+}
+
+if(zipName===""){
+
+    alert("ZIPファイル名を入力してください");
+
+    return;
+
+}
     const zipData =
 await loadZip(zipFile);
 
@@ -68,17 +90,16 @@ for(let i = 0; i < zipData.images.length; i += 2){
     await saveCanvasAsBlob(resultCanvas);
 
     newZip.file(
-        imageName,
-        pngBlob
-    );
+    `${imageName}-${Math.floor(i/2)+1}.png`,
+    pngBlob
+);
 
 }
     await downloadZip(
 
     newZip,
 
-    "background_removed_" +
-    zipFile.name
+    zipName + ".zip"
 
 );
 
