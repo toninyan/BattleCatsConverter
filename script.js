@@ -87,12 +87,15 @@ for(let i = 0; i < zipData.images.length; i += 2){
 
     const pngBlob =
     await saveCanvasAsBlob(resultCanvas);
+　　const totalFrames = Math.ceil(zipData.images.length / 2);
+const digits = String(totalFrames).length;
 
-    newZip.file(
-    `${imageName}-${Math.floor(i/2)+1}.png`,
+const number = String(Math.floor(i / 2) + 1)
+    .padStart(digits, "0");
+  newZip.file(
+    `${imageName}-${number}.png`,
     pngBlob
 );
-
 }
     await downloadZip(
 
