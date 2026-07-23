@@ -72,13 +72,12 @@ const newZip = new JSZip();
 
 for(let i = 0; i < zipData.images.length; i += 2){
 
-    const imageName = zipData.images[i];
+    const originalName = zipData.images[i];
 
     const imageBlob =
     await zipData.zip
-    .file(imageName)
+    .file(originalName)
     .async("blob");
-
     const resultCanvas =
     await processImage(
         imageBlob,
